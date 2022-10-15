@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 
+
 class Background:
     def __init__(self):
         self.image = load_image('metal_background.png')
@@ -18,11 +19,17 @@ class Gunner:
 
     def update(self, imgcnt):
         self.frame = (self.frame + 1) % imgcnt
-        self.x += self.dir * 1
+
         if cdir == -1:
             self.dir = -1
+            if 0 < self.x - 1 < 600:
+                self.x += self.dir * 1
+                print(self.x)
         elif cdir == 1:
             self.dir = 1
+            if 0 < self.x + 1 < 600:
+                self.x += self.dir * 1
+                print(self.x)
         elif cdir == 0:
             self.dir = 0
 
@@ -41,12 +48,8 @@ class Gunner:
             self.image.clip_draw(self.frame * 35, 430, 35, 35, self.x, self.y)
 
 
-
-
-
-
 def handle_events():
-    global cdir, head
+    global cdir, head # 머리 방향
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -65,8 +68,6 @@ def handle_events():
                 cdir -= 1
             elif event.key == SDLK_LEFT:
                 cdir += 1
-
-
 
 gunner = None
 background = None
