@@ -1,5 +1,6 @@
 from pico2d import *
 import game_framework
+import Attack
 
 
 class Background:
@@ -9,20 +10,6 @@ class Background:
     def draw(self):
         self.image.draw(300,450)
 
-class Bullet:
-    global shoot
-    def __init__(self):
-        self.x, self.y = gunner.x, gunner.y+70
-        self.blv = 'Blv1'
-        self.image = load_image('Blv1.png')
-
-    def update(self):
-        if self.y < 900:
-            self.y += 1
-
-    def draw(self):
-        if self.blv == 'Blv1' and shoot == 1:
-            self.image.draw(gunner.x, self.y)
 
 class Gunner:
     global head, shoot
@@ -64,8 +51,6 @@ class Gunner:
 def handle_events():
     global cdir, head, shoot # head=머리 방향
 
-    bullet_xy = []
-
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -81,6 +66,7 @@ def handle_events():
                 gunner.dir += 1
             elif event.key == SDLK_LCTRL:
                 shoot += 1
+                bullets.append(Attack.Bullet())
             elif event.key == SDLK_1:
                 pass
 
@@ -94,29 +80,37 @@ def handle_events():
 
 gunner = None
 background = None
-bullet = None
+bullets = []
 head = 1
 shoot = 0
 imgcnt = 8
 def enter():
-    global gunner, background, bullet
+    global gunner, background, bullets
     gunner = Gunner()
     background = Background()
-    bullet = Bullet()
+    bullets = [Attack.Bullet()]
 
 def exit():
     global gunner, background, bullet
     del gunner
     del background
-    del bullet
+    del bullets
 
 def update():
     gunner.update(imgcnt)
-    bullet.update()
+    for bullet in bullets:
+        bullet.update()
+        if bullet.y > 900:
+            bullets.remove(bullet)
+
+def draw_world():
+    background.draw()
+    gunner.draw()
+    for bullet in bullets:
+        bullet.draw()
+
 
 def draw():
     clear_canvas()
-    background.draw()
-    gunner.draw()
-    bullet.draw()
+    draw_world()
     update_canvas()
