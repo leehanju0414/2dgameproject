@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 import Attack
+import Monster
 
 
 class Background:
@@ -15,38 +16,41 @@ class Gunner:
     global head, shoot
     def __init__(self):
         self.x, self.y = 300, 30
-        self.frame = 0
+        self.framea, self.frameb, self.framec = 1, 1, 1
         self.dir = 0
         self.image = load_image('gunner_image.png')
 
-    def update(self, imgcnt):
-        self.frame = (self.frame + 1) % imgcnt
+    def update(self):
+
+        self.framea = (self.framea + 1) % 10
+        self.frameb = (self.frameb + 1) % 12
+        self.framec = (self.framec + 1) % 16
 
         if self.dir == -1:
             if 0 < self.x - 1 < 600:
-                self.x += self.dir * 1
+                self.x += self.dir * 5
         elif self.dir == 1:
             if 0 < self.x + 1 < 600:
-                self.x += self.dir * 1
+                self.x += self.dir * 5
         else: self.dir = 0
 
     def draw(self):
         if self.dir == 1 and shoot == 0:
-            self.image.clip_draw(self.frame*35, 465, 35, 35, self.x, self.y+15)
-            self.image.clip_draw(self.frame*35, 430, 35, 35, self.x, self.y)
+            self.image.clip_draw(self.frameb*35, 465, 35, 35, self.x, self.y+15, 50, 50)
+            self.image.clip_draw(self.framec*35, 430, 35, 35, self.x, self.y, 50, 50)
         elif self.dir == -1 and shoot == 0:
-            self.image.clip_draw(self.frame * 35, 325, 35, 35, self.x, self.y+15)
-            self.image.clip_draw(self.frame * 35, 290, 35, 35, self.x, self.y)
+            self.image.clip_draw(self.frameb * 35, 325, 35, 35, self.x, self.y+15)
+            self.image.clip_draw(self.framec * 35, 290, 35, 35, self.x, self.y)
         elif self.dir == 0 and head == 0 and shoot == 0:
-            self.image.clip_draw(self.frame * 35, 80, 35, 70, self.x, self.y+10)
+            self.image.clip_draw(self.framec * 35, 80, 35, 70, self.x, self.y+10)
         elif self.dir == 0 and head == 1 and shoot == 0:
-            self.image.clip_draw(self.frame * 35, 150, 35, 70, self.x, self.y+10)
+            self.image.clip_draw(self.framec * 35, 150, 35, 70, self.x, self.y+10)
         elif shoot == 1 and head == 0:
-            self.image.clip_draw(self.frame*35, 220, 35, 70, self.x, self.y+30)
-            self.image.clip_draw(self.frame*35, 290, 35, 35, self.x, self.y)
+            self.image.clip_draw(self.framea*35, 220, 35, 70, self.x, self.y+30)
+            self.image.clip_draw(self.framec*35, 290, 35, 35, self.x, self.y)
         elif shoot == 1 and head == 1:
-            self.image.clip_draw(self.frame*35, 360, 35, 70, self.x, self.y+30)
-            self.image.clip_draw(self.frame*35, 430, 35, 35, self.x, self.y)
+            self.image.clip_draw(self.framea*35, 360, 35, 70, self.x, self.y+30)
+            self.image.clip_draw(self.framec*35, 430, 35, 35, self.x, self.y)
 
 def handle_events():
     global cdir, head, shoot # head=머리 방향
@@ -67,8 +71,9 @@ def handle_events():
             elif event.key == SDLK_LCTRL:
                 shoot += 1
                 bullets.append(Attack.Bullet())
-            elif event.key == SDLK_1:
-                pass
+            elif event.key == SDLK_SPACE:
+                monsters.append(Monster.Normal_mob())
+
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
@@ -81,36 +86,44 @@ def handle_events():
 gunner = None
 background = None
 bullets = []
+monsters = []
 head = 1
 shoot = 0
-imgcnt = 8
 def enter():
-    global gunner, background, bullets
+    global gunner, background, bullets, monsters
     gunner = Gunner()
     background = Background()
     bullets = [Attack.Bullet()]
+    monsters = [Monster.Normal_mob()]
 
 def exit():
-    global gunner, background, bullet
+    global gunner, background, bullets, monsters
     del gunner
     del background
     del bullets
+    del monsters
 
 def update():
-    gunner.update(imgcnt)
+    gunner.update()
     for bullet in bullets:
-        bullet.update()
         if bullet.y > 900:
             bullets.remove(bullet)
+        bullet.update()
+    for monster in monsters:
+        monster.update()
+
 
 def draw_world():
     background.draw()
     gunner.draw()
     for bullet in bullets:
         bullet.draw()
+    for monster in monsters:
+        monster.draw()
 
 
 def draw():
     clear_canvas()
     draw_world()
     update_canvas()
+    delay(0.03)

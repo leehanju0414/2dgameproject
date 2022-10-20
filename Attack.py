@@ -9,7 +9,7 @@ class Bullet:
         self.blv1_image = load_image('Blv1.png')
 
     def update(self):
-        self.y += 1
+        self.y += 10
 
     def draw(self):
         if self.blv == 'Blv1':
