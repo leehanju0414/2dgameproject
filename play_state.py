@@ -4,6 +4,7 @@ import Attack
 import Monster
 
 
+
 class Background:
     def __init__(self):
         self.image = load_image('metal_background.png')
@@ -52,6 +53,7 @@ class Gunner:
             self.image.clip_draw(self.framea*35, 360, 35, 70, self.x, self.y+30)
             self.image.clip_draw(self.framec*35, 430, 35, 35, self.x, self.y)
 
+
 def handle_events():
     global cdir, head, shoot # head=머리 방향
 
@@ -72,8 +74,7 @@ def handle_events():
                 shoot += 1
                 bullets.append(Attack.Bullet())
             elif event.key == SDLK_SPACE:
-                monsters.append(Monster.Normal_mob())
-
+                monsters.append(Monster.Normal())
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
@@ -83,25 +84,27 @@ def handle_events():
             elif event.key == SDLK_LCTRL:
                 shoot -= 1
 
+
 gunner = None
 background = None
 bullets = []
 monsters = []
 head = 1
 shoot = 0
+
 def enter():
-    global gunner, background, bullets, monsters
+    global gunner, background, monsters
     gunner = Gunner()
     background = Background()
-    bullets = [Attack.Bullet()]
-    monsters = [Monster.Normal_mob()]
 
 def exit():
-    global gunner, background, bullets, monsters
+    global gunner, background
     del gunner
     del background
-    del bullets
-    del monsters
+    for bullet in bullets:
+        del bullet
+    for monster in monsters:
+        del monster
 
 def update():
     gunner.update()
@@ -127,3 +130,4 @@ def draw():
     draw_world()
     update_canvas()
     delay(0.03)
+
