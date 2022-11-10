@@ -1,13 +1,17 @@
 from pico2d import *
 import game_framework
-import Attack
-import Monster
-import Player
+from Attack import Bullet
+from Monster import Normal
+from Player import Gunner
+import game_world
 
 
 class Background:
     def __init__(self):
         self.image = load_image('metal_background.png')
+
+    def update(self):
+        pass
 
     def draw(self):
         self.image.draw(300, 450)
@@ -31,9 +35,7 @@ def handle_events():
                     gunner.dir += 1
                 case pico2d.SDLK_LCTRL:
                     shoot += 1
-                    bullets.append(Attack.Bullet())
-                case pico2d.SDLK_SPACE:
-                    monster_add()
+                    bullets.append(Bullet())
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
@@ -52,36 +54,26 @@ head = 1
 shoot = 0
 
 def enter():
-    global gunner, background
-    gunner = Player.Gunner()
+    global gunner, background, bullets
+    gunner = Gunner()
     background = Background()
+    bullets = Bullet()
+    game_world.add_object(background, 0)
+    game_world.add_object(gunner, 1)
+    bullets = [Bullet() for i in range(20)]
+    game_world.add_object(bullets, 1)
 
 def exit():
-    global gunner, background
-    del gunner
-    del background
-    for bullet in bullets:
-        del bullet
-    for monster in monsters:
-        del monster
+    game_world.clear()
 
 def update():
-    gunner.update()
-    for bullet in bullets:
-        if bullet.y > 900:
-            bullets.remove(bullet)
-        bullet.update()
-    for monster in monsters:
-        monster.update()
+    for game_object in game_world.all_objects():
+        game_object.update()
 
 
 def draw_world():
-    background.draw()
-    gunner.draw()
-    for bullet in bullets:
-        bullet.draw()
-    for monster in monsters:
-        monster.draw()
+    for game_object in game_world.all_objects():
+        game_object.draw()
 
 
 def draw():
@@ -91,5 +83,5 @@ def draw():
     delay(0.03)
 
 def monster_add():
-    monsters.append(Monster.Normal())
+    monsters.append(Normal())
 
