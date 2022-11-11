@@ -1,16 +1,18 @@
 from pico2d import *
-import play_state
+import game_world
 
 class Bullet:
-    global shoot, bullet
-    def __init__(self):
-        self.x, self.y = play_state.gunner.x, play_state.gunner.y+70
-        self.blv = 'Blv1'
-        self.blv1_image = load_image('Blv1.png')
-
-    def update(self):
-        self.y += 10
+    image = None
+    def __init__(self, x, y, v):
+        if Bullet.image == None:
+            Bullet.image = load_image('Blv1.png')
+        self.x, self.y, self.v = x, y, v
 
     def draw(self):
-        if self.blv == 'Blv1':
-            self.blv1_image.draw(self.x, self.y)
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        self.y += self.v
+
+        if self.y > 900:
+            game_world.remove_object(self)
