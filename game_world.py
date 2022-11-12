@@ -1,6 +1,6 @@
 # layer 0: Background Objects
 # layer 1: Foreground Objects
-objects = [[], []]
+objects = [[], [], []]
 
 # collision information
 # key : 'boy:balls' string

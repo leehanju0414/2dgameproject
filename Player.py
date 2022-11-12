@@ -2,7 +2,12 @@ from pico2d import *
 import play_state
 from Attack import Bullet
 import game_world
+import game_framework
 
+
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
 
 RD, LD, RU, LU, SD, SU= range(6)
 event_name = ['RD', 'LD', 'RU', 'LU', 'SD', 'SU']
@@ -25,13 +30,13 @@ class IDLE:
         print('EXIT IDLE')
 
     def do(self):
-        self.frame = (self.frame + 1) % 8
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     def draw(self):
         if self.face_dir == 1:
-            self.image.clip_draw(self.frame * 35, 150, 35, 70, self.x, self.y+10)
+            self.image.clip_draw(int(self.frame) * 35, 150, 35, 70, self.x, self.y+10)
         else:
-            self.image.clip_draw(self.frame * 35, 80, 35, 70, self.x, self.y+10)
+            self.image.clip_draw(int(self.frame) * 35, 80, 35, 70, self.x, self.y+10)
 
 
 
@@ -53,17 +58,17 @@ class RUN:
         self.face_dir = self.dir
 
     def do(self):
-        self.frame = (self.frame + 1) % 8
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         self.x += self.dir
         self.x = clamp(0, self.x, 600)
 
     def draw(self):
         if self.dir == -1:
-            self.image.clip_draw(self.frame * 35, 325, 35, 35, self.x, self.y+15)
-            self.image.clip_draw(self.frame * 35, 290, 35, 35, self.x, self.y,)
+            self.image.clip_draw(int(self.frame) * 35, 325, 35, 35, self.x, self.y+15)
+            self.image.clip_draw(int(self.frame) * 35, 290, 35, 35, self.x, self.y,)
         elif self.dir == 1:
-            self.image.clip_draw(self.frame * 35, 465, 35, 35, self.x, self.y + 15)
-            self.image.clip_draw(self.frame * 35, 430, 35, 35, self.x, self.y)
+            self.image.clip_draw(int(self.frame) * 35, 465, 35, 35, self.x, self.y + 15)
+            self.image.clip_draw(int(self.frame) * 35, 430, 35, 35, self.x, self.y)
 
 
 class IDLE_SHOOT:
@@ -77,15 +82,15 @@ class IDLE_SHOOT:
 
     def do(self):
         print('shooting')
-        self.frame = (self.frame + 1) % 8
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     def draw(self):
         if self.face_dir == 1:
-            self.image.clip_draw(self.frame * 35, 360, 35, 70, self.x, self.y + 30)
-            self.image.clip_draw(self.frame * 35, 430, 35, 35, self.x, self.y)
+            self.image.clip_draw(int(self.frame) * 35, 360, 35, 70, self.x, self.y + 30)
+            self.image.clip_draw(int(self.frame) * 35, 430, 35, 35, self.x, self.y)
         else:
-            self.image.clip_draw(self.frame * 35, 220, 35, 70, self.x, self.y + 30)
-            self.image.clip_draw(self.frame*35, 290, 35, 35, self.x, self.y)
+            self.image.clip_draw(int(self.frame) * 35, 220, 35, 70, self.x, self.y + 30)
+            self.image.clip_draw(int(self.frame) * 35, 290, 35, 35, self.x, self.y)
 
 class RUN_SHOOT:
     def enter(self, event):
@@ -106,17 +111,17 @@ class RUN_SHOOT:
 
     def do(self):
         print('shooting')
-        self.frame = (self.frame + 1) % 8
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         self.x += self.dir
         self.x = clamp(0, self.x, 600)
 
     def draw(self):
         if self.dir == 1:
-            self.image.clip_draw(self.frame * 35, 360, 35, 70, self.x, self.y + 30)
-            self.image.clip_draw(self.frame * 35, 430, 35, 35, self.x, self.y)
+            self.image.clip_draw(int(self.frame) * 35, 360, 35, 70, self.x, self.y + 30)
+            self.image.clip_draw(int(self.frame) * 35, 430, 35, 35, self.x, self.y)
         elif self.dir == -1:
-            self.image.clip_draw(self.frame * 35, 220, 35, 70, self.x, self.y + 30)
-            self.image.clip_draw(self.frame*35, 290, 35, 35, self.x, self.y)
+            self.image.clip_draw(int(self.frame) * 35, 220, 35, 70, self.x, self.y + 30)
+            self.image.clip_draw(int(self.frame) * 35, 290, 35, 35, self.x, self.y)
 
 
 next_state = {
