@@ -23,11 +23,10 @@ key_event_table = {
 
 class IDLE:
     def enter(self, event):
-        print('ENTER IDLE')
         self.dir = 0
 
     def exit(self, event):
-        print('EXIT IDLE')
+        pass
 
     def do(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
@@ -42,7 +41,6 @@ class IDLE:
 
 class RUN:
     def enter(self, event):
-        print('ENTER RUN')
 
         if event == RD:
             self.dir += 1
@@ -54,7 +52,6 @@ class RUN:
             self.dir += 1
 
     def exit(self, event):
-        print('EXIT RUN')
         self.face_dir = self.dir
 
     def do(self):
@@ -73,15 +70,13 @@ class RUN:
 
 class IDLE_SHOOT:
     def enter(self, event):
-        print('ENTER SHOOT')
         self.dir = 0
         self.shooting()
 
     def exit(self, event):
-        print('EXIT SHOOT')
+        pass
 
     def do(self):
-        print('shooting')
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     def draw(self):
@@ -94,7 +89,6 @@ class IDLE_SHOOT:
 
 class RUN_SHOOT:
     def enter(self, event):
-        print('ENTER SHOOT')
         self.shooting()
 
         if event == RD:
@@ -107,10 +101,9 @@ class RUN_SHOOT:
             self.dir += 1
 
     def exit(self, event):
-        print('EXIT SHOOT')
+        pass
 
     def do(self):
-        print('shooting')
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         self.x += self.dir
         self.x = clamp(0, self.x, 600)
@@ -170,6 +163,5 @@ class Gunner:
             self.add_event(key_event)
 
     def shooting(self):
-        print('shooting')
         bullet = Bullet(self.x, self.y+30, 2)
         game_world.add_object(bullet, 1)

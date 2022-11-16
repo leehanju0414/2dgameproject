@@ -22,17 +22,23 @@ def handle_events():
 gunner = None
 background = None
 monster = None
+bullet = None
 timer = 0
 
 def enter():
-    global gunner, background, monster, timer
+    global gunner, background, monster, bullet, timer
     gunner = Gunner()
     background = Background()
     monster = Normal()
+    bullet = Bullet(gunner.x, gunner.y+30, 2)
+
     timer = 1000
 
     game_world.add_object(background, 0)
     game_world.add_object(gunner, 1)
+
+    game_world.add_collision_pairs(monster, bullet, 'monster:bullet')
+
 
 def exit():
     game_world.clear()
@@ -45,6 +51,13 @@ def update():
     if timer == 0:
         game_world.add_object(monster, 1)
 
+    for a, b, group in game_world.all_collision_pairs():
+        if collide(a, b):
+            print('COLLISION', group)
+            a.handle_collision(b, group)
+            b.handle_collision(a, group)
+
+
 
 
 def draw_world():
@@ -56,3 +69,15 @@ def draw():
     clear_canvas()
     draw_world()
     update_canvas()
+
+
+def collide(a, b):
+    la, ba, ra, ta = a.get_bb()
+    lb, bb, rb, tb = b.get_bb()
+
+    if la > rb : return False
+    if ra < lb : return False
+    if ta < bb : return False
+    if ba > tb : return False
+
+    return True

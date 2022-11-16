@@ -16,3 +16,10 @@ class Bullet:
 
         if self.y > 900:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - 3, self.y - 4, self.x +3, self.y + 4
+
+    def handle_collision(self, other, group):
+        pass
+
