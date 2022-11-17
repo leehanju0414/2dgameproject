@@ -21,12 +21,16 @@ class Normal:
         self.frame = 0
         self.dir = 0.5
         self.mlv = 'lv1'
+        self.hp = 100
         if Normal.image == None:
             Normal.image = load_image('Lv1_monster.png')
 
     def update(self):
         self.y -= self.dir
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 12
+
+        if self.hp == 0:
+            game_world.remove_object(self)
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * 35, 0, 35, 49, self.x, self.y)
@@ -35,4 +39,4 @@ class Normal:
         return self.x - 20, self.y - 25, self.x +20, self.y + 25
 
     def handle_collision(self, other, group):
-        game_world.remove_object(self)
+        self.hp -= 50
