@@ -164,4 +164,5 @@ class Gunner:
 
     def shooting(self):
         bullet = Bullet(self.x, self.y+30, 2)
-        game_world.add_object(bullet, 1)
+        game_world.add_object(bullet, 3)
+        game_world.add_collision_pairs(bullet, None, 'monster:bullet')

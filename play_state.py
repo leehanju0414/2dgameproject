@@ -5,6 +5,7 @@ from monster import Normal
 from background import Background
 from Player import Gunner
 import game_world
+import schedule
 
 
 def handle_events():
@@ -37,19 +38,18 @@ def enter():
     game_world.add_object(background, 0)
     game_world.add_object(gunner, 1)
 
-    game_world.add_collision_pairs(monster, bullet, 'monster:bullet')
-
 
 def exit():
     game_world.clear()
 
 def update():
+    schedule.run_pending()
     global timer, monster
     for game_object in game_world.all_objects():
         game_object.update()
     timer -= 1
-    if timer == 0:
-        game_world.add_object(monster, 1)
+    # if timer == 0:
+    #     game_world.add_object(monster, 1)
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
@@ -81,3 +81,10 @@ def collide(a, b):
     if ba > tb : return False
 
     return True
+
+def monsterspawn():
+    monster = Normal()
+    game_world.add_object(monster, 2)
+    game_world.add_collision_pairs(None, monster, 'monster:bullet')
+
+schedule.every(1).seconds.do(monsterspawn)
