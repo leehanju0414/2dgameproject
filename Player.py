@@ -38,7 +38,6 @@ class IDLE:
             self.image.clip_draw(int(self.frame) * 35, 80, 35, 70, self.x, self.y+10)
 
 
-
 class RUN:
     def enter(self, event):
 
@@ -123,7 +122,6 @@ next_state = {
     IDLE_SHOOT: {RU: RUN_SHOOT, LU: RUN_SHOOT, RD: RUN_SHOOT, LD: RUN_SHOOT, SD: IDLE_SHOOT, SU: IDLE},
     RUN_SHOOT: {RU: IDLE_SHOOT, LU: IDLE_SHOOT, RD: IDLE_SHOOT, LD: IDLE_SHOOT, SD: RUN_SHOOT, SU: RUN}
 }
-
 
 
 class Gunner:

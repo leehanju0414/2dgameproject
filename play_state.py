@@ -34,13 +34,11 @@ def enter():
     background = Background()
     protector = Protector()
 
-
     game_world.add_object(background, 0)
     game_world.add_object(protector, 1)
     game_world.add_object(gunner, 1)
 
     game_world.add_collision_pairs(protector, None, 'monster:protector')
-
 
 
 def exit():
@@ -51,17 +49,12 @@ def update():
     global timer, monster
     for game_object in game_world.all_objects():
         game_object.update()
-    timer -= 1
-    # if timer == 0:
-    #     game_world.add_object(monster, 1)
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
             print('COLLISION', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
-
-
 
 
 def draw_world():
@@ -91,5 +84,6 @@ def monsterspawn():
     game_world.add_object(monster, 2)
     game_world.add_collision_pairs(None, monster, 'monster:bullet')
     game_world.add_collision_pairs(None, monster, 'monster:protector')
+
 
 schedule.every(1).seconds.do(monsterspawn)
