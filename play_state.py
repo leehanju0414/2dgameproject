@@ -4,6 +4,7 @@ from Attack import Bullet
 from monster import Normal
 from background import Background
 from Player import Gunner
+from protector import Protector
 import game_world
 import schedule
 
@@ -24,19 +25,22 @@ gunner = None
 background = None
 monster = None
 bullet = None
+protector = None
 timer = 0
 
 def enter():
-    global gunner, background, monster, bullet, timer
+    global gunner, background, protector
     gunner = Gunner()
     background = Background()
-    monster = Normal()
-    bullet = Bullet(gunner.x, gunner.y+30, 2)
+    protector = Protector()
 
-    timer = 1000
 
     game_world.add_object(background, 0)
+    game_world.add_object(protector, 1)
     game_world.add_object(gunner, 1)
+
+    game_world.add_collision_pairs(protector, None, 'monster:protector')
+
 
 
 def exit():
@@ -86,5 +90,6 @@ def monsterspawn():
     monster = Normal()
     game_world.add_object(monster, 2)
     game_world.add_collision_pairs(None, monster, 'monster:bullet')
+    game_world.add_collision_pairs(None, monster, 'monster:protector')
 
 schedule.every(1).seconds.do(monsterspawn)

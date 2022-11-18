@@ -39,4 +39,7 @@ class Normal:
         return self.x - 20, self.y - 25, self.x +20, self.y + 25
 
     def handle_collision(self, other, group):
-        self.hp -= 50
+        if group == 'monster:bullet':
+            self.hp -= 50
+        if group == 'monster:protector':
+            game_world.remove_object(self)
