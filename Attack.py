@@ -5,7 +5,7 @@ class Bullet:
     image = None
     def __init__(self, x, y, v):
         if Bullet.image == None:
-            Bullet.image = load_image('Blv1.png')
+            Bullet.image = load_image('image_source/Blv1.png')
         self.x, self.y, self.v = x, y, v
 
     def draw(self):
@@ -21,5 +21,6 @@ class Bullet:
         return self.x - 5, self.y - 5, self.x +5, self.y + 5
 
     def handle_collision(self, other, group):
-        game_world.remove_object(self)
+        if group == 'monster:bullet':
+            game_world.remove_object(self)
 

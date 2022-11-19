@@ -1,12 +1,13 @@
 from pico2d import *
 import game_framework
 from Attack import Bullet
-from monster import Normal
+from monster import Normal1
 from background import Background
 from Player import Gunner
 from protector import Protector
 import game_world
 import schedule
+import pause_menu
 
 
 def handle_events():
@@ -15,7 +16,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.quit()
+            game_framework.push_state(pause_menu)
         else:
             gunner.handle_event(event)
 
@@ -67,6 +68,12 @@ def draw():
     draw_world()
     update_canvas()
 
+def pause():
+    pass
+
+def resume():
+    pass
+
 
 def collide(a, b):
     la, ba, ra, ta = a.get_bb()
@@ -80,7 +87,7 @@ def collide(a, b):
     return True
 
 def monsterspawn():
-    monster = Normal()
+    monster = Normal1()
     game_world.add_object(monster, 2)
     game_world.add_collision_pairs(None, monster, 'monster:bullet')
     game_world.add_collision_pairs(None, monster, 'monster:protector')

@@ -130,11 +130,13 @@ class Gunner:
         self.x, self.y = 300 // 2, 30
         self.frame = 0
         self.dir, self.face_dir = 0, 1
-        self.image = load_image('gunner_image.png')
+        self.image = load_image('image_source/gunner_image.png')
 
         self.event_que = []
         self.cur_state = IDLE
         self.cur_state.enter(self, None)
+
+        self.kill_count = 0
 
     def update(self):
         self.cur_state.do(self)

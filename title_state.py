@@ -5,7 +5,7 @@ import play_state
 class Logo:
 
     def __init__(self):
-        self.image = load_image('title.png')
+        self.image = load_image('image_source/title.png')
 
     def draw(self):
         self.image.draw(300, 450)
