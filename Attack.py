@@ -9,7 +9,7 @@ class Bullet:
         self.x, self.y, self.v = x, y, v
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.image.draw(self.x, self.y, 10, 10)
 
     def update(self):
         self.y += self.v
@@ -18,7 +18,7 @@ class Bullet:
             game_world.remove_object(self)
 
     def get_bb(self):
-        return self.x - 3, self.y - 4, self.x +3, self.y + 4
+        return self.x - 5, self.y - 5, self.x +5, self.y + 5
 
     def handle_collision(self, other, group):
         game_world.remove_object(self)
