@@ -1,10 +1,10 @@
 from pico2d import *
 import game_framework
 from Attack import Bullet
-from monster import Normal1
+from Monster import Normal1
 from background import Background
 from Player import Gunner
-from protector import Protector
+from Protector import Protector
 import game_world
 import schedule
 import pause_menu
